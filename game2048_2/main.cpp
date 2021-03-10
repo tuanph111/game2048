@@ -182,19 +182,19 @@ bool RightToLeft(Block GameMain[4][4], long long &points) {
 						success = true;
 						break;
 					}
-					if (GameMain[cols][rows].get_value() != GameMain[cols][index].get_value() && GameMain[cols][rows].get_value() != 0) break;
+					if (GameMain[cols][rows].get_value() != GameMain[cols][index].get_value() && GameMain[cols][index].get_value() != 0) break;
 				}
 			}
 		}
 	}
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 0; rows< 3; rows++) {
-			if (GameMain[cols][rows].get_value() != 0) {
-				for (short index = rows + 1; rows < 4; rows++) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = rows + 1; index < 4; index++) {
 					if (GameMain[cols][index].get_value() != 0) {
+						success = true;
 						GameMain[cols][rows] = GameMain[cols][index];
 						GameMain[cols][index] = Block(0);
-						success = true;
 						break;
 					}
 				}
