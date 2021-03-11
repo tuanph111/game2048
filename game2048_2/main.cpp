@@ -22,12 +22,13 @@ const int yp = SCREEN_HEIGHT / 3;
 
 void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer);
 void add_new(Block GameMain[4][4]);
-void showGameMain(Block GameMain[4][4], SDL_Renderer *renderer);
+void showGameMain(Block GameMain[4][4], SDL_Renderer *renderer,const long long &points);
 bool test_oke(Block GameMain[4][4]);
 bool RightToLeft(Block GameMain[4][4], long long &points);
 bool LeftToRight(Block GameMain[4][4], long long &points);
 bool UpToDown(Block GameMain[4][4], long long &points);
 bool DownToUp(Block Gamemain[4][4], long long &points);
+void LoadPoint(const long long &points, SDL_Renderer* renderer);
 
 
 int main(int argc, char* argv[]) {
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
 	DrawMainGame(GameMain, renderer);
 	while (running) {
 		SDL_Delay(10);
-		showGameMain(GameMain, renderer);
+		showGameMain(GameMain, renderer,points);
 		if (test_oke(GameMain)==false) {
 			running = false;
 			break;
@@ -80,6 +81,10 @@ int main(int argc, char* argv[]) {
 			if (DownToUp(GameMain, points) == true) add_new(GameMain);
 			up = false;
 		}
+		if (down) {
+			if (UpToDown(GameMain, points) == true) add_new(GameMain);
+			down = false;
+		}
 		SDL_RenderPresent(renderer);
 	}
 
@@ -105,7 +110,8 @@ void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer) {
 		}
 	}
 }
-void showGameMain(Block GameMain[4][4],SDL_Renderer *renderer) {
+void showGameMain(Block GameMain[4][4],SDL_Renderer *renderer,const long long &points) {
+	LoadPoint(points, renderer);
 	for (int cols = 0; cols < 4; cols++) {
 		for (int rows = 0; rows < 4; rows++) {
 			GameMain[cols][rows].showBlock(xp + 90 * rows, yp + 90 * cols, renderer);
@@ -247,5 +253,51 @@ bool DownToUp(Block Gamemain[4][4], long long &points) {
 	return success;
 }
 bool UpToDown(Block GameMain[4][4], long long &points) {
-
+	bool success = false;
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 3; cols > 0; cols--) {
+			if (GameMain[cols][rows].get_value() != 0) {
+				for (short index = cols - 1; index >= 0; index--) {
+					if (GameMain[cols][rows] == GameMain[index][rows]) {
+						success = true;
+						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[index][rows];
+						points += GameMain[cols][rows].get_value();
+						break;
+					}
+					if (GameMain[cols][rows].get_value() != GameMain[index][rows].get_value() && GameMain[index][rows].get_value() != 0) break;
+				}
+			}
+		}
+	}
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 3; cols > 0; cols--) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = cols - 1; index >= 0; index--) {
+					if (GameMain[index][rows].get_value() != 0) {
+						success = true;
+						GameMain[cols][rows] = GameMain[index][rows];
+						GameMain[index][rows] = Block(0);
+						break;
+					}
+				}
+			}
+		}
+	}
+	return success;
+}
+void LoadPoint(const long long &points, SDL_Renderer* renderer) {
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	TTF_Font *font = TTF_OpenFont("C:\\Windows\\Fonts\\Arial.ttf", 600);
+	//int value to string
+	string xau;
+	ostringstream convert;
+	convert << points;
+	xau = convert.str();
+	xau = convert.str();
+	SDL_Surface *surf = TTF_RenderText_Solid(font, xau.c_str(), SDL_Color{ 255,255,255,255 });
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
+	renderTexture(tex, renderer, 0, 0,100,100);
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(tex);
 }
