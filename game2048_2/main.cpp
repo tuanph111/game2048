@@ -286,17 +286,18 @@ bool UpToDown(Block GameMain[4][4], long long &points) {
 	return success;
 }
 void LoadPoint(const long long &points, SDL_Renderer* renderer) {
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	TTF_Font *font = TTF_OpenFont("C:\\Windows\\Fonts\\Arial.ttf", 600);
 	//int value to string
 	string xau;
 	ostringstream convert;
 	convert << points;
 	xau = convert.str();
-	xau = convert.str();
+	SDL_Rect rect_ = { 0,0,80,80 };
+	SDL_SetRenderDrawColor(renderer, 224, 224, 209, 255);
+	SDL_RenderFillRect(renderer, &rect_);
 	SDL_Surface *surf = TTF_RenderText_Solid(font, xau.c_str(), SDL_Color{ 255,255,255,255 });
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
-	renderTexture(tex, renderer, 0, 0,100,100);
+	renderTexture(tex, renderer, 0, 0,80,80);
 	TTF_CloseFont(font);
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(tex);
