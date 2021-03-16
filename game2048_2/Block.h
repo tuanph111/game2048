@@ -1,24 +1,30 @@
 #pragma once
+#ifndef BLOCK_H
+#define BLOCK_H
+
 #include "loadTexture.h"
 #include <SDL_ttf.h>
 #include <string>
 #include <sstream>
+
+
+#endif
 using namespace std;
 class Block{
-	SDL_Rect block;
+	//SDL_Rect block;
 	int value;
 public:
 	Block();
 	Block(int _value);
 	~Block();
 	int get_value() { return value; }
-	void get_block();
-	void showBlock(int const &_x,int const &_y,SDL_Renderer *renderer);
+	//void get_block();
+	//void showBlock(int const &_x,int const &_y,SDL_Renderer *renderer);
 	Block operator+(Block &_block);
 	bool operator==(Block &_block);
 
 };
-Block::Block() {
+/*Block::Block() {
 	value = 0;
 }
 Block::Block(int _value) {
@@ -81,4 +87,4 @@ void Block::showBlock(int const &_x, int const &_y, SDL_Renderer *renderer) {
 	SDL_FreeSurface(surf);
 	TTF_CloseFont(font);
 }
-
+*/

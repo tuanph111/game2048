@@ -1,3 +1,1 @@
-﻿  main.cpp
-d:\game2048_2\game2048_2\main.cpp(36): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe
+﻿  game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe

@@ -1,9 +1,9 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
-#include "Block.h"
 #include <time.h>
 #include <cstdlib>
+#include "MainGame.h"
 using namespace std;
 
 void loadBG(SDL_Renderer *renderer) {
@@ -13,7 +13,7 @@ void loadBG(SDL_Renderer *renderer) {
 }
 
 
-
+/*
 Block GameMain[4][4];
 Block Random[2] = { Block(2),Block(4) };
 const int xp = 25;
@@ -30,7 +30,7 @@ bool UpToDown(Block GameMain[4][4], long long &points);
 bool DownToUp(Block Gamemain[4][4], long long &points);
 void LoadPoint(const long long &points, SDL_Renderer* renderer);
 
-
+*/
 int main(int argc, char* argv[]) {
 	TTF_Init();
 	srand(time(0));
@@ -38,17 +38,20 @@ int main(int argc, char* argv[]) {
 	SDL_Renderer *renderer;
 	initSDL(window, renderer);
 	SDL_Event e;
-	bool running = true;
+	/*bool running = true;
 	bool right = false;
 	bool left = false;
 	bool up = false;
 	bool down = false;
-	int x = 25;
+	*/
+
+	/*int x = 25;
 	int y = SCREEN_HEIGHT / 3;
-	long long points = 0;
+	long long points = 0;*/
 	loadBG(renderer);
-	DrawMainGame(GameMain, renderer);
-	while (running) {
+	MainGame mainGame;
+	//DrawMainGame(GameMain, renderer);
+	/*while (running) {
 		SDL_Delay(10);
 		showGameMain(GameMain, renderer,points);
 		if (test_oke(GameMain)==false) {
@@ -86,14 +89,14 @@ int main(int argc, char* argv[]) {
 			down = false;
 		}
 		SDL_RenderPresent(renderer);
-	}
-
+	}*/
+	mainGame.runGame(renderer, &e);
 	quitSDL(window, renderer);
 	return 0;
 }
 
 
-void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer) {
+/*void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer) {
 	for (int cols = 0; cols < 4; cols++) {
 		for (int rows = 0; rows < 4; rows++) {
 			GameMain[cols][rows] = Block(0);
@@ -301,4 +304,4 @@ void LoadPoint(const long long &points, SDL_Renderer* renderer) {
 	TTF_CloseFont(font);
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(tex);
-}
+}*/
