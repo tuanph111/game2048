@@ -16,7 +16,7 @@ class MainGame{
 	const int xp = 25;
 	const int yp = SCREEN_HEIGHT / 3;
 public:
-	//MainGame();
+	MainGame();
 	~MainGame();
 	void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer);
 	void add_new(Block GameMain[4][4]);

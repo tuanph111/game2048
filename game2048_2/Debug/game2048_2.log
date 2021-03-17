@@ -1,1 +1,8 @@
-﻿  game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe
+﻿  Block.cpp
+  DrawBlock.cpp
+  MainGame.cpp
+  loadTexture.cpp
+  main.cpp
+d:\game2048_2\game2048_2\main.cpp(19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe
