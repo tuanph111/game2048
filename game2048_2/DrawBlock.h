@@ -10,7 +10,6 @@
 class DrawBlock {
 	SDL_Rect block;
 public:
-	void get_block();
 	void showBlock(int const &_x, int const &_y, SDL_Renderer *renderer,Block BlockDraw);
 };
 

@@ -6,13 +6,14 @@
 #include <time.h>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #endif
 
 class MainGame{
 	long long points = 0;
 	Block GameMain[4][4];
-	Block Random[2] = { Block(2),Block(4) };
+	Block Random[2] = { Block(2048),Block(4096) };
 	const int xp = 25;
 	const int yp = SCREEN_HEIGHT / 3;
 public:
