@@ -12,21 +12,21 @@
 
 class MainGame{
 	long long points = 0;
-	Block GameMain[4][4];
-	Block Random[2] = { Block(2048),Block(4096) };
+	vector<vector<Block>> GameMain;
+	Block Random[2] = { Block(2),Block(4) };
 	const int xp = 25;
 	const int yp = SCREEN_HEIGHT / 3;
 public:
 	MainGame();
 	~MainGame();
-	void DrawMainGame(Block GameMain[4][4], SDL_Renderer *renderer);
-	void add_new(Block GameMain[4][4]);
-	void showGameMain(Block GameMain[4][4], SDL_Renderer *renderer, const long long &points);
-	bool test_oke(Block GameMain[4][4]);
-	bool RightToLeft(Block GameMain[4][4], long long &points);
-	bool LeftToRight(Block GameMain[4][4], long long &points);
-	bool UpToDown(Block GameMain[4][4], long long &points);
-	bool DownToUp(Block Gamemain[4][4], long long &points);
+	void DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *renderer);
+	void add_new(vector<vector<Block>> &GameMain);
+	void showGameMain(vector<vector<Block>> &GameMain, SDL_Renderer *renderer, const long long &points);
+	bool test_oke(vector<vector<Block>> &GameMain);
+	bool moveLeft(vector<vector<Block>> &GameMain, long long &points);
+	bool moveRight(vector<vector<Block>> &GameMain, long long &points);
+	bool moveDown(vector<vector<Block>> &GameMain, long long &points);
+	bool moveUp(vector<vector<Block>> &GameMain, long long &points);
 	void LoadPoint(const long long &points, SDL_Renderer* renderer);
 	void runGame(SDL_Renderer *renderer, SDL_Event *e);
 };
