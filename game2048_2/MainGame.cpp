@@ -11,10 +11,11 @@ void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
 	bool running = true;
 	bool right = false, left = false, up = false, down = false;
 	DrawMainGame(GameMain, renderer);
+	LoadBackgroundMusic();
 	while (running) {
-		SDL_Delay(10);
-		showGameMain(GameMain, renderer, points);
-		if (test_oke(GameMain) == false) {
+		//SDL_Delay(10);
+		showGameMain(renderer);
+		if (test_oke() == false) {
 			running = false;
 			break;
 		}
@@ -33,23 +34,24 @@ void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
 			}
 		}
 		if (right) {
-			if (moveRight(GameMain, points) == true) add_new(GameMain);
+			if (moveRight() == true) { add_new(); LoadSoundEffect(); }
 			right = false;
 		}
 		if (left) {
-			if (moveLeft(GameMain, points) == true) add_new(GameMain);
+			if (moveLeft() == true) { add_new(); LoadSoundEffect(); }
 			left = false;
 		}
 		if (up) {
-			if (moveUp(GameMain, points) == true) add_new(GameMain);
+			if (moveUp() == true) { add_new(); LoadSoundEffect(); }
 			up = false;
 		}
 		if (down) {
-			if (moveDown(GameMain, points) == true) add_new(GameMain);
+			if (moveDown() == true) { add_new(); LoadSoundEffect(); }
 			down = false;
 		}
 		SDL_RenderPresent(renderer);
 	}
+	Mix_FreeMusic(gMusic);
 }
 void MainGame::DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *renderer) {
 	for (int cols = 0; cols < 4; cols++) {
@@ -70,8 +72,8 @@ void MainGame::DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *rende
 		}
 	}
 }
-void MainGame::showGameMain(vector<vector<Block>> &GameMain, SDL_Renderer *renderer, const long long &points) {
-	LoadPoint(points, renderer);
+void MainGame::showGameMain(SDL_Renderer *renderer) {
+	LoadPoint( renderer);
 	DrawBlock BlockDraw;
 	for (int cols = 0; cols < 4; cols++) {
 		for (int rows = 0; rows < 4; rows++) {
@@ -79,7 +81,7 @@ void MainGame::showGameMain(vector<vector<Block>> &GameMain, SDL_Renderer *rende
 		}
 	}
 }
-void MainGame::add_new(vector<vector<Block>> &GameMain) {
+void MainGame::add_new() {
 	bool oke = true;
 	while (oke) {
 		int a = rand() % 4;
@@ -90,7 +92,7 @@ void MainGame::add_new(vector<vector<Block>> &GameMain) {
 		}
 	}
 }
-bool MainGame::test_oke(vector<vector<Block>> &GameMain) {
+bool MainGame::test_oke() {
 	for (int cols = 0; cols < 4; cols++) {
 		for (int rows = 0; rows < 4; rows++) {
 			if (GameMain[cols][rows].get_value() == 0) return true;
@@ -108,7 +110,7 @@ bool MainGame::test_oke(vector<vector<Block>> &GameMain) {
 	}
 	return false;
 }
-bool MainGame :: moveRight(vector<vector<Block>> &GameMain, long long &points) {
+bool MainGame :: moveRight() {
 	bool success = false;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 3; rows > 0; rows--) {
@@ -116,7 +118,7 @@ bool MainGame :: moveRight(vector<vector<Block>> &GameMain, long long &points) {
 				for (short index = rows - 1; index >= 0; index--) {
 					if (GameMain[cols][rows] == GameMain[cols][index]) {
 						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[cols][index];
-						points += GameMain[cols][index].get_value();
+						points += GameMain[cols][rows].get_value();
 						success = true;
 						break;
 					}
@@ -143,7 +145,7 @@ bool MainGame :: moveRight(vector<vector<Block>> &GameMain, long long &points) {
 	}
 	return success;
 }
-bool MainGame :: moveLeft(vector<vector<Block>> &GameMain, long long &points) {
+bool MainGame :: moveLeft() {
 	bool success = false;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 0; rows < 3; rows++) {
@@ -178,7 +180,7 @@ bool MainGame :: moveLeft(vector<vector<Block>> &GameMain, long long &points) {
 	}
 	return success;
 }
-bool MainGame ::moveUp(vector<vector<Block>> &GameMain, long long &points) {
+bool MainGame ::moveUp() {
 	bool success = false;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 0; cols < 3; cols++) {
@@ -213,7 +215,7 @@ bool MainGame ::moveUp(vector<vector<Block>> &GameMain, long long &points) {
 	}
 	return success;
 }
-bool MainGame :: moveDown(vector<vector<Block>> &GameMain, long long &points) {
+bool MainGame :: moveDown() {
 	bool success = false;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 3; cols > 0; cols--) {
@@ -246,7 +248,7 @@ bool MainGame :: moveDown(vector<vector<Block>> &GameMain, long long &points) {
 	}
 	return success;
 }
-void MainGame :: LoadPoint(const long long &points, SDL_Renderer* renderer) {
+void MainGame :: LoadPoint( SDL_Renderer* renderer) {
 	TTF_Font *font = TTF_OpenFont("font\\font.ttf", 600);
 	string xau;
 	SDL_Rect rect_ = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 - 150,80,80 };
@@ -266,4 +268,26 @@ void MainGame :: LoadPoint(const long long &points, SDL_Renderer* renderer) {
 	SDL_DestroyTexture(tex);
 	SDL_FreeSurface(surf_1);
 	SDL_DestroyTexture(tex_1);
+}
+void MainGame::LoadBackgroundMusic() {
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		std::cout << "Loi";
+	}
+	gMusic = Mix_LoadMUS("music//beat_2048.wav");
+	if (gMusic == NULL) {
+		cout << "Loi";
+	}
+	if (Mix_PlayingMusic() == 0) {
+		Mix_PlayMusic(gMusic, -1);
+	}
+
+}
+void MainGame::LoadSoundEffect() {
+	gChunk = Mix_LoadWAV("music\\4.wav");
+	if (gChunk == NULL) {
+		cout << "loi:";
+	}
+	Mix_PlayChannel(-1, gChunk, 0);
+	SDL_Delay(200);
+	Mix_FreeChunk(gChunk);
 }

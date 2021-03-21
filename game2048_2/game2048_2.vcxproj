@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\SDL2\visual studio\SDL2_ttf-2.0.15\include;E:\SDL2\visual studio\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\SDL2\visual studio\SDL2_ttf-2.0.15\lib\x86;E:\SDL2\visual studio\SDL2-2.0.14\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\SDL2\visual studio\SDL2_mixer-2.0.4\include;E:\SDL2\visual studio\SDL2_ttf-2.0.15\include;E:\SDL2\visual studio\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\SDL2\visual studio\SDL2_mixer-2.0.4\lib\x86;E:\SDL2\visual studio\SDL2_ttf-2.0.15\lib\x86;E:\SDL2\visual studio\SDL2-2.0.14\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,7 +82,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
