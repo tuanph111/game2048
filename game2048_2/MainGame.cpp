@@ -10,10 +10,10 @@ MainGame::~MainGame() {
 void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
 	bool running = true;
 	bool right = false, left = false, up = false, down = false;
+	loadBG(renderer);
 	DrawMainGame(GameMain, renderer);
 	LoadBackgroundMusic();
 	while (running) {
-		//SDL_Delay(10);
 		showGameMain(renderer);
 		if (test_oke() == false) {
 			running = false;
@@ -71,6 +71,11 @@ void MainGame::DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *rende
 			index--;
 		}
 	}
+}
+void MainGame::loadBG(SDL_Renderer *renderer) {
+	SDL_Texture *texture = loadTexture("img\\bg.bmp", renderer);
+	renderTexture(texture, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_DestroyTexture(texture);
 }
 void MainGame::showGameMain(SDL_Renderer *renderer) {
 	LoadPoint( renderer);

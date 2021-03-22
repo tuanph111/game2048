@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="DrawBlock.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="loadTexture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
@@ -136,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="DrawBlock.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="loadTexture.h" />
     <ClInclude Include="MainGame.h" />
   </ItemGroup>

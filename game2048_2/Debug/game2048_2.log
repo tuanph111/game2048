@@ -1,2 +1,3 @@
-﻿  MainGame.cpp
+﻿  GameMenu.cpp
+d:\game2048_2\game2048_2\gamemenu.cpp(31): warning C4715: 'GameMenu::LoadGameMenu': not all control paths return a value
   game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe

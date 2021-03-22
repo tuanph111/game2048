@@ -3,14 +3,16 @@
 #include <iostream>
 #include <SDL.h>
 #include <string>
-#endif
-using namespace std;
-
+#include <ostream>
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const string WINDOW_TITLE = "Game 2048";
+const std::string WINDOW_TITLE = "Game 2048";
 
-void logSDLError(std::ostream& os,
+#endif
+
+
+
+void logSDLError(std::ostream &os,
 const std::string &msg, bool fatal = false);
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
 void quitSDL(SDL_Window* window, SDL_Renderer* renderer);

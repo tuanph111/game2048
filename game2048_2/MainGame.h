@@ -22,6 +22,7 @@ class MainGame{
 public:
 	MainGame();
 	~MainGame();
+	void loadBG(SDL_Renderer *renderer);
 	void DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *renderer);
 	void add_new();
 	void showGameMain(SDL_Renderer *renderer);
