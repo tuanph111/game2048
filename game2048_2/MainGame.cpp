@@ -278,7 +278,7 @@ void MainGame::LoadBackgroundMusic() {
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
 		std::cout << "Loi";
 	}
-	gMusic = Mix_LoadMUS("music//beat_2048.wav");
+	gMusic = Mix_LoadMUS("music\\beat_2048.wav");
 	if (gMusic == NULL) {
 		cout << "Loi";
 	}

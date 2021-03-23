@@ -35,4 +35,5 @@ public:
 	void runGame(SDL_Renderer *renderer, SDL_Event *e);
 	void LoadBackgroundMusic();
 	void LoadSoundEffect();
+	long long get_points() { return points; };
 };

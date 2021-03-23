@@ -130,6 +130,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="DrawBlock.cpp" />
     <ClCompile Include="GameMenu.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="loadTexture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="DrawBlock.h" />
     <ClInclude Include="GameMenu.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="loadTexture.h" />
     <ClInclude Include="MainGame.h" />
   </ItemGroup>
