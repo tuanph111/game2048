@@ -7,11 +7,11 @@ MainGame::~MainGame() {
 
 }
 
-void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
+bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) {
 	bool running = true;
 	bool right = false, left = false, up = false, down = false;
 	loadBG(renderer);
-	DrawMainGame(GameMain, renderer);
+	DrawMainGame(renderer);
 	LoadBackgroundMusic();
 	while (running) {
 		showGameMain(renderer);
@@ -21,8 +21,9 @@ void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
 		}
 		while (SDL_PollEvent(e)) {
 			if (e->type == SDL_QUIT) {
+				quitSDL(window, renderer);
 				running = false;
-				break;
+				return false;
 			}
 			if (e->type == SDL_KEYDOWN) {
 				if (e->key.keysym.sym == SDLK_ESCAPE) running = false;
@@ -51,9 +52,12 @@ void MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e) {
 		}
 		SDL_RenderPresent(renderer);
 	}
+	loadHighScoreToFile();
 	Mix_FreeMusic(gMusic);
+	return true;
 }
-void MainGame::DrawMainGame(vector<vector<Block>> &GameMain, SDL_Renderer *renderer) {
+void MainGame::DrawMainGame(SDL_Renderer *renderer) {
+	loadHighScore(renderer);
 	for (int cols = 0; cols < 4; cols++) {
 		GameMain.resize(4 * 4);
 		for (int rows = 0; rows < 4; rows++) {
@@ -254,25 +258,15 @@ bool MainGame :: moveDown() {
 	return success;
 }
 void MainGame :: LoadPoint( SDL_Renderer* renderer) {
-	TTF_Font *font = TTF_OpenFont("font\\font.ttf", 600);
-	string xau;
 	SDL_Rect rect_ = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 - 150,80,80 };
 	SDL_SetRenderDrawColor(renderer, 224, 224, 209, 255);
 	SDL_RenderFillRect(renderer, &rect_);
-	SDL_Surface *surf = TTF_RenderText_Solid(font, "SCORE:", SDL_Color{ 153, 153, 153 ,255 });
-	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
-	renderTexture(tex, renderer, SCREEN_WIDTH / 4 - 150, SCREEN_HEIGHT / 3 - 150, 150, 80);
+	LoadText(renderer, SCREEN_WIDTH / 4 - 150, SCREEN_HEIGHT / 3 - 150, 150, 80, "SCORE:");
+	string xau;
 	ostringstream convert;
 	convert << points;
 	xau = convert.str();
-	SDL_Surface *surf_1 = TTF_RenderText_Solid(font, xau.c_str(), SDL_Color{ 153, 153, 153 ,255 });
-	SDL_Texture *tex_1 = SDL_CreateTextureFromSurface(renderer, surf_1);
-	renderTexture(tex_1, renderer, SCREEN_WIDTH/4, SCREEN_HEIGHT/3-150, 80, 80);
-	TTF_CloseFont(font);
-	SDL_FreeSurface(surf);
-	SDL_DestroyTexture(tex);
-	SDL_FreeSurface(surf_1);
-	SDL_DestroyTexture(tex_1);
+	LoadText(renderer, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 - 150, 80, 80, xau);
 }
 void MainGame::LoadBackgroundMusic() {
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
@@ -295,4 +289,52 @@ void MainGame::LoadSoundEffect() {
 	Mix_PlayChannel(-1, gChunk, 0);
 	SDL_Delay(200);
 	Mix_FreeChunk(gChunk);
+}
+void MainGame::loadHighScoreFromFile() {
+	ifstream openFile("highScore.txt");
+	while (!openFile.eof()) {
+		int a;
+		openFile >> a;
+		highScore.push_back(a);
+	}
+	openFile.close();
+}
+void MainGame::loadHighScoreToFile() {
+	highScore[highScore.size() - 1] = points;
+	std::sort(highScore.begin(), highScore.begin() + highScore.size(), SoSanh);
+	ofstream GhiFile("highScore.txt");
+	GhiFile.clear();
+	for (short i = 0; i < highScore.size(); i++) {
+		GhiFile << highScore[i] << " ";
+	}
+	GhiFile.close();
+}
+bool SoSanh(const int &a, const int &b) {
+	return a > b;
+
+}
+void MainGame::loadHighScore(SDL_Renderer *renderer) {
+	loadHighScoreFromFile();
+	LoadText(renderer, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 3 - 150, 200, 80, "HIGH SCORE:");
+	for (int i = 0; i < highScore.size(); i++) {
+		ostringstream convert[2];
+		string xau[2];
+		convert[0] << i+1;
+		xau[0] = xau[0] + convert[0].str();
+		xau[0] = xau[0] + ". ";
+		LoadText(renderer, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 3 - 150 + 80 * (i + 1), 80, 80, xau[0]);
+		convert[1] << highScore[i];
+		xau[1].clear();
+		xau[1] = convert[1].str();
+		LoadText(renderer, SCREEN_WIDTH / 2 + 100 + 80, SCREEN_HEIGHT / 3 - 150 + 80 * (i + 1), 120, 80, xau[1]);
+	}
+}
+void MainGame::LoadText(SDL_Renderer *renderer, const int &xp, const int &yp, const int &w, const int &h,string Text) {
+	TTF_Font *font = TTF_OpenFont("font\\font.ttf", 600);
+	SDL_Surface *surf = TTF_RenderText_Solid(font, Text.c_str(), SDL_Color{ 153, 153, 153 ,255 });
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
+	renderTexture(tex, renderer, xp, yp, w, h);
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(surf);
+	TTF_CloseFont(font);
 }

@@ -19,13 +19,14 @@ int main(int argc, char* argv[]) {
 	initSDL(window, renderer);
 	SDL_Event e;
 	GameMenu MenuGame;
-	if (MenuGame.LoadGameMenu(renderer, window, &e) == true) {
-		bool Continue = true;
-		while (Continue) {
+	bool Continue = true;
+	while (Continue) {
+		if (MenuGame.LoadGameMenu(renderer, window, &e) == true) {
 			MainGame mainGame;
-			mainGame.runGame(renderer, &e);
+			Continue=mainGame.runGame(renderer, &e, window);
+			if (!Continue) return 0;
 			GameOver gameover;
-			Continue=gameover.loadGameOver(renderer, &e);
+			Continue=gameover.loadGameOver(renderer, &e, mainGame.get_points());
 		}
 	}
 	quitSDL(window, renderer);

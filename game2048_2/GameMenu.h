@@ -13,6 +13,7 @@ class GameMenu {
 	SDL_Color White = { 230, 230, 230 ,255 };
 	bool CheckForcusWithRect(const int &x, const int &y, const SDL_Rect &_rect);
 public:
+	~GameMenu();
 	bool LoadGameMenu(SDL_Renderer *renderer, SDL_Window *window,SDL_Event *M_event);
 	void loadBG_GameMenu(SDL_Renderer *renderer);
 };

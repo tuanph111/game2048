@@ -1,5 +1,7 @@
 #include "GameMenu.h"
+GameMenu::~GameMenu() {
 
+}
 bool GameMenu::LoadGameMenu(SDL_Renderer *renderer, SDL_Window *window, SDL_Event *M_event) {
 	loadBG_GameMenu(renderer);
 	bool running = true;
@@ -46,6 +48,9 @@ bool GameMenu::LoadGameMenu(SDL_Renderer *renderer, SDL_Window *window, SDL_Even
 void GameMenu::loadBG_GameMenu(SDL_Renderer *renderer) {
 	SDL_Texture *tex = loadTexture("D://anh//gamemenu.bmp", renderer);
 	renderTexture(tex, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	arrRect[0] = loadText(renderer, Menu[0], 270, 300, 200, 80, White);
+	arrRect[1] = loadText(renderer, Menu[1], 270, 400, 100, 80, White);
+	SDL_RenderPresent(renderer);
 	SDL_DestroyTexture(tex);
 }
 SDL_Rect GameMenu::loadText(SDL_Renderer *renderer, const char* xau, 

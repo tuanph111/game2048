@@ -51,7 +51,6 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		logSDLError(std::cout, "SDL_Init", true);
-
 	window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr) logSDLError(std::cout, "CreateWindow", true);
