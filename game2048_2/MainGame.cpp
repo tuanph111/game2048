@@ -292,10 +292,11 @@ void MainGame::LoadSoundEffect() {
 }
 void MainGame::loadHighScoreFromFile() {
 	ifstream openFile("highScore.txt");
-	while (!openFile.eof()) {
-		int a;
-		openFile >> a;
-		highScore.push_back(a);
+	int dem = 0;
+	highScore.resize(5);
+	while (dem<5) {
+		openFile >> highScore[dem];
+		dem++;
 	}
 	openFile.close();
 }
@@ -316,17 +317,15 @@ bool SoSanh(const int &a, const int &b) {
 void MainGame::loadHighScore(SDL_Renderer *renderer) {
 	loadHighScoreFromFile();
 	LoadText(renderer, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 3 - 150, 200, 80, "HIGH SCORE:");
-	for (int i = 0; i < highScore.size(); i++) {
+	for (int i = 0; i < 5; i++) {
 		ostringstream convert[2];
-		string xau[2];
+		string xau;
 		convert[0] << i+1;
-		xau[0] = xau[0] + convert[0].str();
-		xau[0] = xau[0] + ". ";
-		LoadText(renderer, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 3 - 150 + 80 * (i + 1), 80, 80, xau[0]);
+		xau = xau + convert[0].str();
+		xau = xau + ". ";
 		convert[1] << highScore[i];
-		xau[1].clear();
-		xau[1] = convert[1].str();
-		LoadText(renderer, SCREEN_WIDTH / 2 + 100 + 80, SCREEN_HEIGHT / 3 - 150 + 80 * (i + 1), 120, 80, xau[1]);
+		xau = xau + convert[1].str();
+		LoadText(renderer, SCREEN_WIDTH / 2 + 100 , SCREEN_HEIGHT / 3 - 150 + 80 * (i + 1), 200, 80, xau);
 	}
 }
 void MainGame::LoadText(SDL_Renderer *renderer, const int &xp, const int &yp, const int &w, const int &h,string Text) {

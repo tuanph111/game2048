@@ -1,3 +1,3 @@
-﻿  main.cpp
-d:\game2048_2\game2048_2\main.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  GameOver.cpp
+d:\game2048_2\game2048_2\gameover.cpp(43): warning C4715: 'GameOver::loadGameOver': not all control paths return a value
   game2048_2.vcxproj -> D:\game2048_2\Debug\game2048_2.exe

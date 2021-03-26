@@ -46,7 +46,7 @@ bool GameMenu::LoadGameMenu(SDL_Renderer *renderer, SDL_Window *window, SDL_Even
 	}
 }
 void GameMenu::loadBG_GameMenu(SDL_Renderer *renderer) {
-	SDL_Texture *tex = loadTexture("D://anh//gamemenu.bmp", renderer);
+	SDL_Texture *tex = loadTexture("img\\gamemenu.bmp", renderer);
 	renderTexture(tex, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	arrRect[0] = loadText(renderer, Menu[0], 270, 300, 200, 80, White);
 	arrRect[1] = loadText(renderer, Menu[1], 270, 400, 100, 80, White);
@@ -56,9 +56,9 @@ void GameMenu::loadBG_GameMenu(SDL_Renderer *renderer) {
 SDL_Rect GameMenu::loadText(SDL_Renderer *renderer, const char* xau, 
 							const int &xp, const int &yp,const int &w, const int &h,const SDL_Color &TextColor) {
 	SDL_Rect _rect = { xp, yp, w, h };
-	SDL_Texture *tex_1 = loadTexture("D:\\anh\\image.bmp", renderer);
+	SDL_Texture *tex_1 = loadTexture("img\\image.bmp", renderer);
 	renderTexture(tex_1, renderer, xp-10, yp - 10, w + 20, h);
-	TTF_Font *font = TTF_OpenFont("D://anh//font.ttf", 60);
+	TTF_Font *font = TTF_OpenFont("font//font.ttf", 60);
 	SDL_Surface *surf = TTF_RenderText_Solid(font, xau, TextColor);
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
 	renderTexture(tex, renderer, xp, yp, w, h);

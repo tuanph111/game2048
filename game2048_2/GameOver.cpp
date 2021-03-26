@@ -47,7 +47,7 @@ void GameOver::loadBackGroundgameOver(SDL_Renderer *renderer,long long points) {
 	convert << points;
 	xau = convert.str();
 	xau = "Score:" + xau;
-	SDL_Texture *tex = loadTexture("D://anh//gameover.bmp", renderer);
+	SDL_Texture *tex = loadTexture("img//gameover.bmp", renderer);
 	renderTexture(tex, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	arrRect[2] = loadText(renderer, xau.c_str(), 200, 200, 300, 100, White);
 	arrRect[0] = loadText(renderer, Menu[0], 270, 300, 120, 80, White);
@@ -58,7 +58,7 @@ void GameOver::loadBackGroundgameOver(SDL_Renderer *renderer,long long points) {
 SDL_Rect GameOver::loadText(SDL_Renderer *renderer, const char* xau, const int &xp, const int &yp,
 	const int &w, const int &h, const SDL_Color &TextColor) {
 	SDL_Rect _rect = { xp, yp, w, h };
-	TTF_Font *font = TTF_OpenFont("D://anh//font.ttf", 60);
+	TTF_Font *font = TTF_OpenFont("font//font.ttf", 60);
 	SDL_Surface *surf = TTF_RenderText_Solid(font, xau, TextColor);
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
 	renderTexture(tex, renderer, xp, yp, w, h);
