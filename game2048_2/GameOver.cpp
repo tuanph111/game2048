@@ -16,16 +16,16 @@ bool GameOver::loadGameOver(SDL_Renderer *renderer, SDL_Event *M_event, long lon
 				int xm = M_event->motion.x;
 				int ym = M_event->motion.y;
 				if (CheckForcusWithRect(xm, ym, arrRect[0]) == true) {
-					arrRect[0] = loadText(renderer, Menu[0], 270, 300, 120, 80, Black);
+					arrRect[0] = loadText(renderer, Menu[0], 270, 400, 120, 80, Black);
 				}
 				else {
-					arrRect[0] = loadText(renderer, Menu[0], 270, 300, 120, 80, White);
+					arrRect[0] = loadText(renderer, Menu[0], 270, 400, 120, 80, White);
 				}
 				if (CheckForcusWithRect(xm, ym, arrRect[1]) == true) {
-					arrRect[1] = loadText(renderer, Menu[1], 270, 380, 100, 80, Black);
+					arrRect[1] = loadText(renderer, Menu[1], 270, 480, 100, 80, Black);
 				}
 				else {
-					arrRect[1] = loadText(renderer, Menu[1], 270, 380, 100, 80, White);
+					arrRect[1] = loadText(renderer, Menu[1], 270, 480, 100, 80, White);
 				}
 			}
 			if (M_event->type == SDL_MOUSEBUTTONDOWN) {
@@ -49,16 +49,17 @@ void GameOver::loadBackGroundgameOver(SDL_Renderer *renderer,long long points) {
 	xau = "Score:" + xau;
 	SDL_Texture *tex = loadTexture("img//gameover.bmp", renderer);
 	renderTexture(tex, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	arrRect[2] = loadText(renderer, xau.c_str(), 200, 200, 300, 100, White);
-	arrRect[0] = loadText(renderer, Menu[0], 270, 300, 120, 80, White);
-	arrRect[1] = loadText(renderer, Menu[1], 270, 380, 100, 80, White);
+	arrRect[2] = loadText(renderer, xau.c_str(), 200, 300, 300, 100, White);
+	arrRect[0] = loadText(renderer, Menu[0], 270, 400, 120, 80, White);
+	arrRect[1] = loadText(renderer, Menu[1], 270, 480, 100, 80, White);
+	arrRect[3] = loadText(renderer, Menu[2], 130, 100, 460, 200, White);
 	SDL_RenderPresent(renderer);
 	SDL_DestroyTexture(tex);
 }
 SDL_Rect GameOver::loadText(SDL_Renderer *renderer, const char* xau, const int &xp, const int &yp,
 	const int &w, const int &h, const SDL_Color &TextColor) {
 	SDL_Rect _rect = { xp, yp, w, h };
-	TTF_Font *font = TTF_OpenFont("font//font.ttf", 60);
+	TTF_Font *font = TTF_OpenFont("font//font.ttf", 100);
 	SDL_Surface *surf = TTF_RenderText_Solid(font, xau, TextColor);
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
 	renderTexture(tex, renderer, xp, yp, w, h);

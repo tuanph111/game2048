@@ -29,17 +29,21 @@ class MainGame{
 public:
 	MainGame();
 	~MainGame();
+	bool runGame(SDL_Renderer *renderer, SDL_Event *e, SDL_Window *window);
 	void loadBG(SDL_Renderer *renderer);
 	void DrawMainGame(SDL_Renderer *renderer);
 	void add_new();
 	void showGameMain(SDL_Renderer *renderer);
 	bool test_oke();
-	bool moveLeft();
-	bool moveRight();
-	bool moveDown();
-	bool moveUp();
+	bool testMoveLeft();
+	int moveLeft();
+	bool testMoveRight();
+	int moveRight();
+	bool testMoveDown();
+	int moveDown();
+	bool testMoveUp();
+	int moveUp();
 	void LoadPoint(SDL_Renderer* renderer);
-	bool runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window);
 	void LoadBackgroundMusic();
 	void LoadSoundEffect();
 	long long get_points() { return points; };

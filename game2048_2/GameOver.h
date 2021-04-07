@@ -8,8 +8,8 @@
 #endif
 class GameOver {
 	GameMenu gameover;
-	const char* Menu[2] = { "Menu","Exit" };
-	SDL_Rect arrRect[3];
+	const char* Menu[3] = { "Menu","Exit","Game Over" };
+	SDL_Rect arrRect[4];
 	SDL_Color Black = { 51, 51, 0, 255 };
 	SDL_Color White = { 230, 230, 230 ,255 };
 	SDL_Rect loadText(SDL_Renderer *renderer, const char* xau, const int &xp, const int &yp,

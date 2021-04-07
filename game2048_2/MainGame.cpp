@@ -23,6 +23,8 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 			if (e->type == SDL_QUIT) {
 				quitSDL(window, renderer);
 				running = false;
+				loadHighScoreToFile();
+				Mix_FreeMusic(gMusic);
 				return false;
 			}
 			if (e->type == SDL_KEYDOWN) {
@@ -35,19 +37,35 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 			}
 		}
 		if (right) {
-			if (moveRight() == true) { add_new(); LoadSoundEffect(); }
+			if (testMoveRight() == true) {
+				points += moveRight();
+				add_new();
+				LoadSoundEffect(); 
+			}
 			right = false;
 		}
 		if (left) {
-			if (moveLeft() == true) { add_new(); LoadSoundEffect(); }
+			if (testMoveLeft() == true) { 
+				points += moveLeft();
+				add_new();
+				LoadSoundEffect();
+			}
 			left = false;
 		}
 		if (up) {
-			if (moveUp() == true) { add_new(); LoadSoundEffect(); }
+			if (testMoveUp() == true) {
+				points += moveUp();
+				add_new(); 
+				LoadSoundEffect();
+			}
 			up = false;
 		}
 		if (down) {
-			if (moveDown() == true) { add_new(); LoadSoundEffect(); }
+			if (testMoveDown() == true) { 
+				points += moveDown();
+				add_new(); 
+				LoadSoundEffect();
+			}
 			down = false;
 		}
 		SDL_RenderPresent(renderer);
@@ -119,16 +137,36 @@ bool MainGame::test_oke() {
 	}
 	return false;
 }
-bool MainGame :: moveRight() {
-	bool success = false;
+bool MainGame::testMoveRight() {
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 0; rows < 3; rows++) {
+			if (GameMain[cols][rows].get_value() == GameMain[cols][rows + 1].get_value() && GameMain[cols][rows].get_value() != 0) {
+				return true;
+			}
+		}
+	}
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 3; rows > 0; rows--) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = rows - 1; index >= 0; index--) {
+					if (GameMain[cols][index].get_value() != 0) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+int MainGame :: moveRight() {
+	int point = 0;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 3; rows > 0; rows--) {
 			if (GameMain[cols][rows].get_value() != 0) {
 				for (short index = rows - 1; index >= 0; index--) {
 					if (GameMain[cols][rows] == GameMain[cols][index]) {
 						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[cols][index];
-						points += GameMain[cols][rows].get_value();
-						success = true;
+						point += GameMain[cols][rows].get_value();
 						break;
 					}
 					if (GameMain[cols][rows].get_value() != GameMain[cols][index].get_value() && GameMain[cols][index].get_value() != 0) {
@@ -143,7 +181,6 @@ bool MainGame :: moveRight() {
 			if (GameMain[cols][rows].get_value() == 0) {
 				for (short index = rows - 1; index >= 0; index--) {
 					if (GameMain[cols][index].get_value() != 0) {
-						success = true;
 						GameMain[cols][rows] = GameMain[cols][index];
 						GameMain[cols][index] = Block(0);
 						break;
@@ -152,18 +189,36 @@ bool MainGame :: moveRight() {
 			}
 		}
 	}
-	return success;
+	return point;
 }
-bool MainGame :: moveLeft() {
-	bool success = false;
+bool MainGame::testMoveLeft() {
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 3; rows > 0; rows--) {
+			if (GameMain[cols][rows].get_value() == GameMain[cols][rows - 1].get_value() && GameMain[cols][rows].get_value() != 0) {
+				return true;
+			}
+		}
+	}
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 0; rows < 3; rows++) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = rows + 1; index < 4; index++) {
+					if (GameMain[cols][index].get_value() != 0) return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+int MainGame :: moveLeft() {
+	int point=0;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 0; rows < 3; rows++) {
 			if (GameMain[cols][rows].get_value() != 0) {
 				for (short index = rows + 1; index < 4; index++) {
 					if (GameMain[cols][rows] == GameMain[cols][index]) {
-						success = true;
 						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[cols][index];
-						points += GameMain[cols][rows].get_value();
+						point += GameMain[cols][rows].get_value();
 						break;
 					}
 					if (GameMain[cols][rows].get_value() != GameMain[cols][index].get_value() && GameMain[cols][index].get_value() != 0) {
@@ -178,7 +233,6 @@ bool MainGame :: moveLeft() {
 			if (GameMain[cols][rows].get_value() == 0) {
 				for (short index = rows + 1; index < 4; index++) {
 					if (GameMain[cols][index].get_value() != 0) {
-						success = true;
 						GameMain[cols][rows] = GameMain[cols][index];
 						GameMain[cols][index] = Block(0);
 						break;
@@ -187,18 +241,38 @@ bool MainGame :: moveLeft() {
 			}
 		}
 	}
-	return success;
+	return point;
 }
-bool MainGame ::moveUp() {
-	bool success = false;
+bool MainGame::testMoveUp() {
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 0; cols < 3; cols++) {
+			if (GameMain[cols][rows].get_value() == GameMain[cols + 1][rows].get_value() && GameMain[cols][rows].get_value() != 0) {
+				return true;
+			}
+		}
+	}
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 0; cols < 3; cols++) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = cols + 1; index < 4; index++) {
+					if (GameMain[index][rows].get_value() != 0) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+int MainGame ::moveUp() {
+	int point = 0;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 0; cols < 3; cols++) {
 			if (GameMain[cols][rows].get_value() != 0) {
 				for (short index = cols + 1; index < 4; index++) {
 					if (GameMain[cols][rows].get_value() == GameMain[index][rows].get_value()) {
-						success = true;
 						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[index][rows];
-						points += GameMain[cols][rows].get_value();
+						point += GameMain[cols][rows].get_value();
 						break;
 					}
 					if (GameMain[cols][rows].get_value() != GameMain[index][rows].get_value() && GameMain[index][rows].get_value() != 0) {
@@ -215,25 +289,44 @@ bool MainGame ::moveUp() {
 					if (GameMain[index][rows].get_value() != 0) {
 						GameMain[cols][rows] = GameMain[index][rows];
 						GameMain[index][rows] = Block(0);
-						success = true;
 						break;
 					}
 				}
 			}
 		}
 	}
-	return success;
+	return point;
 }
-bool MainGame :: moveDown() {
-	bool success = false;
+bool MainGame::testMoveDown() {
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 0; cols < 3; cols++) {
+			if (GameMain[cols][rows].get_value() == GameMain[cols + 1][rows].get_value() && GameMain[cols][rows].get_value() != 0) {
+				return true;
+			}
+		}
+	}
+	for (short rows = 0; rows < 4; rows++) {
+		for (short cols = 3; cols > 0; cols--) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				for (short index = cols - 1; index >= 0; index--) {
+					if (GameMain[index][rows].get_value() != 0) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+int MainGame :: moveDown() {
+	int point = 0;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 3; cols > 0; cols--) {
 			if (GameMain[cols][rows].get_value() != 0) {
 				for (short index = cols - 1; index >= 0; index--) {
 					if (GameMain[cols][rows] == GameMain[index][rows]) {
-						success = true;
 						GameMain[cols][rows] = GameMain[cols][rows] + GameMain[index][rows];
-						points += GameMain[cols][rows].get_value();
+						point += GameMain[cols][rows].get_value();
 						break;
 					}
 					if (GameMain[cols][rows].get_value() != GameMain[index][rows].get_value() && GameMain[index][rows].get_value() != 0) break;
@@ -246,7 +339,6 @@ bool MainGame :: moveDown() {
 			if (GameMain[cols][rows].get_value() == 0) {
 				for (short index = cols - 1; index >= 0; index--) {
 					if (GameMain[index][rows].get_value() != 0) {
-						success = true;
 						GameMain[cols][rows] = GameMain[index][rows];
 						GameMain[index][rows] = Block(0);
 						break;
@@ -255,8 +347,9 @@ bool MainGame :: moveDown() {
 			}
 		}
 	}
-	return success;
+	return point;
 }
+//load Points
 void MainGame :: LoadPoint( SDL_Renderer* renderer) {
 	SDL_Rect rect_ = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 - 150,80,80 };
 	SDL_SetRenderDrawColor(renderer, 224, 224, 209, 255);
@@ -268,6 +361,7 @@ void MainGame :: LoadPoint( SDL_Renderer* renderer) {
 	xau = convert.str();
 	LoadText(renderer, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 - 150, 80, 80, xau);
 }
+// Load Music and Sound Effect
 void MainGame::LoadBackgroundMusic() {
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
 		std::cout << "Loi";
@@ -290,6 +384,7 @@ void MainGame::LoadSoundEffect() {
 	SDL_Delay(200);
 	Mix_FreeChunk(gChunk);
 }
+// Load and Save High Score
 void MainGame::loadHighScoreFromFile() {
 	ifstream openFile("highScore.txt");
 	int dem = 0;
@@ -337,3 +432,4 @@ void MainGame::LoadText(SDL_Renderer *renderer, const int &xp, const int &yp, co
 	SDL_FreeSurface(surf);
 	TTF_CloseFont(font);
 }
+
