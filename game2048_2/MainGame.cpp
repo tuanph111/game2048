@@ -13,7 +13,11 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 	loadBG(renderer);
 	DrawMainGame(renderer);
 	LoadBackgroundMusic();
+	const int FPS = 120;
+	const int FRAME_PERIOD = 1000.0f / FPS;
+	Uint32 FrameStart, FrameTime;
 	while (running) {
+		FrameStart = SDL_GetTicks();
 		showGameMain(renderer);
 		if (test_oke() == false) {
 			running = false;
@@ -37,38 +41,42 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 			}
 		}
 		if (right) {
-			if (testMoveRight() == true) {
-				points += moveRight();
+			if (canMoveRight(GameMain) == true) {
+				points += moveRight(GameMain);
 				add_new();
 				LoadSoundEffect(); 
 			}
 			right = false;
 		}
 		if (left) {
-			if (testMoveLeft() == true) { 
-				points += moveLeft();
+			if (canMoveLeft(GameMain) == true) {
+				points += moveLeft(GameMain);
 				add_new();
 				LoadSoundEffect();
 			}
 			left = false;
 		}
 		if (up) {
-			if (testMoveUp() == true) {
-				points += moveUp();
+			if (canMoveUp(GameMain) == true) {
+				points += moveUp(GameMain);
 				add_new(); 
 				LoadSoundEffect();
 			}
 			up = false;
 		}
 		if (down) {
-			if (testMoveDown() == true) { 
-				points += moveDown();
+			if (canMoveDown(GameMain) == true) {
+				points += moveDown(GameMain);
 				add_new(); 
 				LoadSoundEffect();
 			}
 			down = false;
 		}
 		SDL_RenderPresent(renderer);
+		FrameTime = SDL_GetTicks() - FrameStart;
+		if (FrameTime < FRAME_PERIOD) {
+			SDL_Delay((int)FRAME_PERIOD - FrameTime);
+		}
 	}
 	loadHighScoreToFile();
 	Mix_FreeMusic(gMusic);
@@ -137,7 +145,7 @@ bool MainGame::test_oke() {
 	}
 	return false;
 }
-bool MainGame::testMoveRight() {
+bool MainGame::canMoveRight(vector<vector<Block>> &GameMain) {
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 0; rows < 3; rows++) {
 			if (GameMain[cols][rows].get_value() == GameMain[cols][rows + 1].get_value() && GameMain[cols][rows].get_value() != 0) {
@@ -158,7 +166,7 @@ bool MainGame::testMoveRight() {
 	}
 	return false;
 }
-int MainGame :: moveRight() {
+int MainGame :: moveRight(vector<vector<Block>> &GameMain) {
 	int point = 0;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 3; rows > 0; rows--) {
@@ -191,7 +199,7 @@ int MainGame :: moveRight() {
 	}
 	return point;
 }
-bool MainGame::testMoveLeft() {
+bool MainGame::canMoveLeft(vector<vector<Block>> &GameMain) {
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 3; rows > 0; rows--) {
 			if (GameMain[cols][rows].get_value() == GameMain[cols][rows - 1].get_value() && GameMain[cols][rows].get_value() != 0) {
@@ -210,7 +218,7 @@ bool MainGame::testMoveLeft() {
 	}
 	return false;
 }
-int MainGame :: moveLeft() {
+int MainGame :: moveLeft(vector<vector<Block>> &GameMain) {
 	int point=0;
 	for (short cols = 0; cols < 4; cols++) {
 		for (short rows = 0; rows < 3; rows++) {
@@ -243,7 +251,7 @@ int MainGame :: moveLeft() {
 	}
 	return point;
 }
-bool MainGame::testMoveUp() {
+bool MainGame::canMoveUp(vector<vector<Block>> &GameMain) {
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 0; cols < 3; cols++) {
 			if (GameMain[cols][rows].get_value() == GameMain[cols + 1][rows].get_value() && GameMain[cols][rows].get_value() != 0) {
@@ -264,7 +272,7 @@ bool MainGame::testMoveUp() {
 	}
 	return false;
 }
-int MainGame ::moveUp() {
+int MainGame ::moveUp(vector<vector<Block>> &GameMain) {
 	int point = 0;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 0; cols < 3; cols++) {
@@ -297,7 +305,7 @@ int MainGame ::moveUp() {
 	}
 	return point;
 }
-bool MainGame::testMoveDown() {
+bool MainGame::canMoveDown(vector<vector<Block>> &GameMain) {
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 0; cols < 3; cols++) {
 			if (GameMain[cols][rows].get_value() == GameMain[cols + 1][rows].get_value() && GameMain[cols][rows].get_value() != 0) {
@@ -318,7 +326,7 @@ bool MainGame::testMoveDown() {
 	}
 	return false;
 }
-int MainGame :: moveDown() {
+int MainGame :: moveDown(vector<vector<Block>> &GameMain) {
 	int point = 0;
 	for (short rows = 0; rows < 4; rows++) {
 		for (short cols = 3; cols > 0; cols--) {

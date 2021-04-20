@@ -35,16 +35,18 @@ public:
 	void add_new();
 	void showGameMain(SDL_Renderer *renderer);
 	bool test_oke();
-	bool testMoveLeft();
-	int moveLeft();
-	bool testMoveRight();
-	int moveRight();
-	bool testMoveDown();
-	int moveDown();
-	bool testMoveUp();
-	int moveUp();
+	bool canMoveLeft(vector<vector<Block>> &GameMain);
+	int moveLeft(vector<vector<Block>> &GameMain);
+	bool canMoveRight(vector<vector<Block>> &GameMain);
+	int moveRight(vector<vector<Block>> &GameMain);
+	bool canMoveDown(vector<vector<Block>> &GameMain);
+	int moveDown(vector<vector<Block>> &GameMain);
+	bool canMoveUp(vector<vector<Block>> &GameMain);
+	int moveUp(vector<vector<Block>> &GameMain);
 	void LoadPoint(SDL_Renderer* renderer);
 	void LoadBackgroundMusic();
 	void LoadSoundEffect();
 	long long get_points() { return points; };
+
+
 };
