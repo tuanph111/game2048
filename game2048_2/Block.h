@@ -11,7 +11,6 @@
 #endif
 using namespace std;
 class Block{
-	//SDL_Rect block;
 	int value;
 public:
 	Block();

@@ -17,8 +17,8 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 	const int FRAME_PERIOD = 1000.0f / FPS;
 	Uint32 FrameStart, FrameTime;
 	while (running) {
-		FrameStart = SDL_GetTicks();
 		showGameMain(renderer);
+		FrameStart = SDL_GetTicks();
 		if (test_oke() == false) {
 			running = false;
 			break;
@@ -84,23 +84,15 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 }
 void MainGame::DrawMainGame(SDL_Renderer *renderer) {
 	loadHighScore(renderer);
-	for (int cols = 0; cols < 4; cols++) {
-		GameMain.resize(4 * 4);
-		for (int rows = 0; rows < 4; rows++) {
-			Block m_block = Block(0);
-			GameMain[cols].push_back(m_block);
+	for (short cols = 0; cols < 4; cols++) {
+		vector<Block> _rows;
+		for (short rows = 0; rows < 4; rows++) {
+			_rows.push_back(Block(0));
 		}
+		GameMain.push_back(_rows);
 	}
-	for (int index = 0; index < 2; index++) {
-		int a = rand() % 4;
-		int b = rand() % 4;
-		if (GameMain[a][b].get_value() == 0) {
-			GameMain[a][b] = Random[rand() % 2];
-		}
-		else {
-			index--;
-		}
-	}
+	add_new();
+	add_new();
 }
 void MainGame::loadBG(SDL_Renderer *renderer) {
 	SDL_Texture *texture = loadTexture("img\\bg.bmp", renderer);
@@ -110,40 +102,29 @@ void MainGame::loadBG(SDL_Renderer *renderer) {
 void MainGame::showGameMain(SDL_Renderer *renderer) {
 	LoadPoint( renderer);
 	DrawBlock BlockDraw;
-	for (int cols = 0; cols < 4; cols++) {
-		for (int rows = 0; rows < 4; rows++) {
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 0; rows < 4; rows++) {
 			BlockDraw.showBlock(xp + 90 * rows, yp + 90 * cols, renderer,GameMain[cols][rows]);
 		}
 	}
 }
 void MainGame::add_new() {
-	bool oke = true;
-	while (oke) {
-		int a = rand() % 4;
-		int b = rand() % 4;
-		if (GameMain[a][b].get_value() == 0) {
-			GameMain[a][b] = Random[rand() % 2];
-			oke = false;
+	vector<pair<short, short>> getAvailable;
+	for (short cols = 0; cols < 4; cols++) {
+		for (short rows = 0; rows < 4; rows++) {
+			if (GameMain[cols][rows].get_value() == 0) {
+				pair<short, short> position;
+				position.first = cols;
+				position.second = rows;
+				getAvailable.push_back(position);
+			}
 		}
 	}
+	int index = rand() % getAvailable.size();
+	GameMain[getAvailable[index].first][getAvailable[index].second] = Random[rand() % 2];
 }
 bool MainGame::test_oke() {
-	for (int cols = 0; cols < 4; cols++) {
-		for (int rows = 0; rows < 4; rows++) {
-			if (GameMain[cols][rows].get_value() == 0) return true;
-		}
-	}
-	for (int cols = 0; cols < 4; cols++) {
-		for (int rows = 0; rows < 3; rows++) {
-			if (GameMain[cols][rows].get_value() == GameMain[cols][rows + 1].get_value()) return true;
-		}
-	}
-	for (int rows = 0; rows < 4; rows++) {
-		for (int cols = 0; cols < 3; cols++) {
-			if (GameMain[cols][rows].get_value() == GameMain[cols + 1][rows].get_value()) return true;
-		}
-	}
-	return false;
+	return canMoveDown(GameMain) || canMoveUp(GameMain) || canMoveRight(GameMain) || canMoveLeft(GameMain);
 }
 bool MainGame::canMoveRight(vector<vector<Block>> &GameMain) {
 	for (short cols = 0; cols < 4; cols++) {
@@ -395,7 +376,7 @@ void MainGame::LoadSoundEffect() {
 // Load and Save High Score
 void MainGame::loadHighScoreFromFile() {
 	ifstream openFile("highScore.txt");
-	int dem = 0;
+	short dem = 0;
 	highScore.resize(5);
 	while (dem<5) {
 		openFile >> highScore[dem];
@@ -404,7 +385,12 @@ void MainGame::loadHighScoreFromFile() {
 	openFile.close();
 }
 void MainGame::loadHighScoreToFile() {
-	highScore[highScore.size() - 1] = points;
+	if (points > 0) {
+		highScore[highScore.size() - 1] = points;
+	}
+	else {
+		return;
+	}
 	std::sort(highScore.begin(), highScore.begin() + highScore.size(), SoSanh);
 	ofstream GhiFile("highScore.txt");
 	GhiFile.clear();
