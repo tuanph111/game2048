@@ -77,6 +77,7 @@ bool MainGame::runGame(SDL_Renderer *renderer, SDL_Event *e,SDL_Window *window) 
 		if (FrameTime < FRAME_PERIOD) {
 			SDL_Delay((int)FRAME_PERIOD - FrameTime);
 		}
+		SDL_Delay(10);
 	}
 	loadHighScoreToFile();
 	Mix_FreeMusic(gMusic);
@@ -385,7 +386,7 @@ void MainGame::loadHighScoreFromFile() {
 	openFile.close();
 }
 void MainGame::loadHighScoreToFile() {
-	if (points > 0) {
+	if (points > highScore[highScore.size()-1]) {
 		highScore[highScore.size() - 1] = points;
 	}
 	else {
