@@ -28,6 +28,7 @@ int main(int argc, char* argv[]) {
 			GameOver gameover;
 			Continue=gameover.loadGameOver(renderer, &e, mainGame.get_points());
 		}
+		else break;
 	}
 	quitSDL(window, renderer);
 	return 0;
